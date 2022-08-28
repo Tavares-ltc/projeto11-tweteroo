@@ -18,13 +18,13 @@ const tweets = [
     }
 ]
 app.post("/sign-up", (req, res) => {
-    const {username, avatar} = req.body
-    if(!username || !avatar){
+    const { username, avatar } = req.body
+    if (!username || !avatar) {
         return res.status(400).send("Todos os campos são obrigatórios.")
     }
     const user = req.body;
     users.push(user);
-    res.send('OK');
+    res.status(201).send('OK');
 })
 app.get("/tweets", (req, res) => {
     const lastTweets = tweets.map((tweet) => {
@@ -36,9 +36,15 @@ app.get("/tweets", (req, res) => {
     res.send(lastTweets.slice(0, 10))
 })
 app.post('/tweets', (req, res) => {
-    const tweet = req.body;
-    tweets.unshift(tweet);
-    res.send('OK');
+    const { username, tweet } = req.body
+
+    if (!username || !tweet) {
+        res.status(400).send("Todos os campos são obrigatórios.")
+    }
+
+    const post = req.body;
+    tweets.unshift(post);
+    res.status(201).send('OK');
 })
 
 app.listen(5000, () => { console.log('Server rodando na prota 5000') })
