@@ -28,11 +28,18 @@ app.post("/sign-up", (req, res) => {
 })
 app.get("/tweets/:name", (req, res) => {
     const name = req.params.name
-    const personTweets = tweets.filter(tweets => tweets.username === name)
+    const personTweets = tweets.filter(tweet => tweet.username === name)
+    const tweetsWithImg = personTweets.map(tweet => {
+        return{
+            ...tweet,
+            avatar: users.find(user => user.username === tweet.username).avatar
+        }
+    })
     if (personTweets.length === 0) {
         return res.status(404).send('Nenhum tweet desse usuario foi encontrado')
     }
-    return res.status(200).send(personTweets)
+    return res.status(200).send(tweetsWithImg)
+    
 })
 app.get("/tweets", (req, res) => {
     const lastTweets = tweets.map((tweet) => {
